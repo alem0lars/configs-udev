@@ -4,7 +4,7 @@
   end
 end -%>
 
-<% drives.select{|d| d.get("type") == "harddisk"}.each do |drive| %>
+<% get_var!(:drives).select{|d| d.get("type") == "harddisk"}.each do |drive| %>
 ACTION=="add|change", \
 KERNEL=="<%= drive["dev"].split("/").first %>", \
 ATTR{queue/rotational}=="1", \
