@@ -1,0 +1,12 @@
+<% define_locals do
+  computed(:command) do
+    ->(apm, timeout, dev){"/usr/bin/hdparm -B #{apm} -S #{timeout} #{dev}"}
+  end
+end -%>
+
+<% drives.select{|d| d.get("type") == "harddisk"}.each do |drive| %>
+ACTION=="add|change", \
+KERNEL=="<%= drive["dev"].split("/").first %>", \
+ATTR{queue/rotational}=="1", \
+RUN+="<%= command[drive.slice(%w(apm timeout dev))] %>"
+<% end -%>

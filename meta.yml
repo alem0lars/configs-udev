@@ -1,0 +1,9 @@
+elems:
+
+  - src: elems/rules/([0-9]+-.+\.rules)$
+    dst: /etc/udev/rules.d/<1>
+    only:
+      features:
+        - udev
+
+# vim: set filetype=eruby.yaml :

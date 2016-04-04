@@ -1,0 +1,7 @@
+# => inherits: generic <= #
+
+drives:
+  - type: hdd
+    device: /dev/sdb
+    timeout: 128
+    apm: 192
