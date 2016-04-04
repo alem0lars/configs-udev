@@ -2,6 +2,6 @@
 
 drives:
   - type: hdd
-    device: /dev/sdb
+    dev: /dev/sdb
     timeout: 128
     apm: 192

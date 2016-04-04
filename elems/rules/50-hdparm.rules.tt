@@ -1,12 +1,22 @@
 <% define_locals do
-  computed(:command) do
-    ->(apm, timeout, dev){"/usr/bin/hdparm -B #{apm} -S #{timeout} #{dev}"}
+  computed(:drives) do
+    get_var!(:drives).map do |drive|
+      drive = {
+        type: drive["type"].to_s.to_sym,
+        dev: drive["dev"],
+        apm: drive["apm"],
+        timeout: drive["timeout"]
+      }
+      drive[:name] = drive[:dev].split("/").last
+      drive[:command] = "/usr/bin/hdparm " +
+                        "-B #{drive[:apm]} " +
+                        "-S #{drive[:timeout]} " +
+                        "#{drive[:dev]}"
+      drive
+    end
   end
 end -%>
 
-<% get_var!(:drives).select{|d| d.get("type") == "harddisk"}.each do |drive| %>
-ACTION=="add|change", \
-KERNEL=="<%= drive["dev"].split("/").first %>", \
-ATTR{queue/rotational}=="1", \
-RUN+="<%= command[drive.slice(%w(apm timeout dev))] %>"
+<% local!(:drives).select{|d| d[:type] == :hdd}.each do |drive| %>
+ACTION=="add|change", KERNEL=="<%= drive[:name] %>", ATTR{queue/rotational}=="1", RUN+="<%= drive[:command] %>"
 <% end -%>
