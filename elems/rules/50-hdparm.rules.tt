@@ -8,7 +8,7 @@
         timeout: drive["timeout"]
       }
       drive[:name] = drive[:dev].split("/").last
-      drive[:command] = "/usr/bin/hdparm " +
+      drive[:command] = "/sbin/hdparm " +
                         "-B #{drive[:apm]} " +
                         "-S #{drive[:timeout]} " +
                         "#{drive[:dev]}"
